@@ -1,4 +1,4 @@
-from itertools import combinations as comb
+from itertools import combinations
 
 
 def inicializa_grafo(grafo):
@@ -21,22 +21,29 @@ def inicializa_grafo(grafo):
     return grafo
 
 
-def combinatoria(grafo):
-    comb(grafo.keys())
-
-
 def verifica_solucao(grafo, solucao):
-    pass
+    chaves = grafo.keys()
+    tamanho = len(grafo.keys())
+    for i in range(tamanho - 1, 0, -1):
+        comb = combinations(grafo.keys(), i)
+        y = [i for i in comb]
+        y = list(map(lambda x: list(x), y))
+        print(y)
+
+        for j in y:
+            nao_marcado = chaves - j
+            print(list(nao_marcado))
+            # verificar se os não_marcados tem seus
+            # vizinhos como solução, ou seja, estão marcado
 
 
 def main():
     grafo = {}
     grafo = inicializa_grafo(grafo)
-    # print(grafo.keys())
 
-    # solucao = [1, 2]
+    solucao = [1, 2]
 
-    # verifica_solucao(grafo, solucao)
+    verifica_solucao(grafo, solucao)
 
 
 main()
