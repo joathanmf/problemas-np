@@ -8,13 +8,18 @@ def inicializa_grafo(grafo):
 
     for linha in linhas:
         linha = linha.split(" ")
-        grafo.update({linha[0]: []})
+        chave = int(linha[0])
+        grafo.update({chave: []})
 
     for linha in linhas:
         linha = linha.split(" ")
+        chave = int(linha[0])
+
         valor = linha[1].split("\n")
-        valor_grafo = grafo.get(linha[0])
-        grafo.update({linha[0]: valor_grafo + [valor[0]]})
+        valor = int(valor[0])
+        valor_grafo = grafo.get(chave)
+
+        grafo.update({chave: valor_grafo + [valor]})
 
     arquivo.close()
 
@@ -24,15 +29,23 @@ def inicializa_grafo(grafo):
 def verifica_solucao(grafo, solucao):
     chaves = grafo.keys()
     tamanho = len(grafo.keys())
+
     for i in range(tamanho - 1, 0, -1):
         comb = combinations(grafo.keys(), i)
         y = [i for i in comb]
         y = list(map(lambda x: list(x), y))
         print(y)
 
-        for j in y:
-            nao_marcado = chaves - j
+        for sol in y:
+            nao_marcado = chaves - sol
             print(list(nao_marcado))
+
+            for k in nao_marcado:
+                val = grafo.get(k)
+                if sol == val:
+                    
+
+                
             # verificar se os não_marcados tem seus
             # vizinhos como solução, ou seja, estão marcado
 
