@@ -1,6 +1,5 @@
 from itertools import combinations
 
-
 def inicializa_grafo(grafo):
     arquivo = open("grafo.txt", "r", encoding="utf-8")
 
@@ -25,38 +24,49 @@ def inicializa_grafo(grafo):
 
     return grafo
 
-
+#Isso aqui é so pra falar se a solução funciona ou não
 def verifica_solucao(grafo, solucao):
     chaves = grafo.keys()
-    tamanho = len(grafo.keys())
+    nao_marcado = chaves - solucao
+        
+    for k in nao_marcado:
+        vizinhos = grafo.get(k)
+        print('vizinho do nao marcado: ', vizinhos)
+        for vizinho in vizinhos:
+            if vizinho not in solucao:
+                print('nao é solucao')
+                return False
+            else:
+                print('true')
+    return True
 
+def solucao_otima(grafo):
+    tamanho = len(grafo.keys()) 
+
+    solucao_ot = []
     for i in range(tamanho - 1, 0, -1):
         comb = combinations(grafo.keys(), i)
         y = [i for i in comb]
         y = list(map(lambda x: list(x), y))
-        print(y)
-
-        for sol in y:
-            nao_marcado = chaves - sol
-            print(list(nao_marcado))
-
-            for k in nao_marcado:
-                val = grafo.get(k)
-                if sol == val:
-                    
-
-                
-            # verificar se os não_marcados tem seus
-            # vizinhos como solução, ou seja, estão marcado
-
-
+        print('\nCombinatoria: ', y)
+        for combinatoria in y:
+            ehSolucao = verifica_solucao(grafo, combinatoria)
+            # Se a combinatoria de tamanho i é uma solucao, entao achamos uma solucao de tamanho i
+            # Entao podemos começar verificar as combinatorias de tamanho i - 1
+            if ehSolucao:
+                solucao_ot = combinatoria
+                break
+        # Se foi achado uma solucao de tamanho i entao podemos continuar verificando
+        # Se nao, a solucao otima tem tamanho i + 1, logo diferente de i, entao retorna a solucao otima
+        if len(solucao_ot) != i:
+            return solucao_ot
+        
 def main():
     grafo = {}
     grafo = inicializa_grafo(grafo)
 
-    solucao = [1, 2]
-
-    verifica_solucao(grafo, solucao)
-
+    #verifica_solucao(grafo, solucao)
+    solucao = solucao_otima(grafo)
+    print('\n Solucao otima encontrada: ', solucao)
 
 main()
