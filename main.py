@@ -31,13 +31,12 @@ def verifica_solucao(grafo, solucao):
         
     for k in nao_marcado:
         vizinhos = grafo.get(k)
-        print('vizinho do nao marcado: ', vizinhos)
+        # print('vizinho do nao marcado: ', vizinhos)
         for vizinho in vizinhos:
             if vizinho not in solucao:
-                print('nao é solucao')
+                # print('nao é solucao')
                 return False
-            else:
-                print('true')
+
     return True
 
 def solucao_otima(grafo):
@@ -48,7 +47,7 @@ def solucao_otima(grafo):
         comb = combinations(grafo.keys(), i)
         y = [i for i in comb]
         y = list(map(lambda x: list(x), y))
-        print('\nCombinatoria: ', y)
+        # print('\nCombinatoria: ', y)
         for combinatoria in y:
             ehSolucao = verifica_solucao(grafo, combinatoria)
             # Se a combinatoria de tamanho i é uma solucao, entao achamos uma solucao de tamanho i
@@ -61,37 +60,42 @@ def solucao_otima(grafo):
         if len(solucao_ot) != i:
             return solucao_ot
         
+# def convert_vertex_to_independent(grafo, solucao):
+#     lista_de_valores_grafo = list(grafo.values())
+#     valores_grafos = []
+#     valores_grafos_puros = []
+#     independet = []
+    
+#     # Colocando as tuplas do grafo em um unico vetor 
+#     for i in lista_de_valores_grafo:
+#         valores_grafos = i + valores_grafos
+#     # Retirando os elementos duplicados
+#     for element in valores_grafos:
+#         if element not in valores_grafos_puros:
+#             valores_grafos_puros.append(element)
+#     # Por fim, retirando os elementos que contem no vertex e o que sobra 
+#     # é o independet
+#     for element in valores_grafos_puros:
+#         if element not in solucao:
+#             independet.append(element)
+    
+#     # Falta otimizar o código pois ninguem merece 3 for e muito menos 3 vetor
+#     return independet
+
+
 def convert_vertex_to_independent(grafo, solucao):
-    
-    lista_de_valores_grafo = list(grafo.values())
-    valores_grafos = []
-    valores_grafos_puros = []
-    independet = []
-    
-    # Colocando as tuplas do grafo em um unico vetor 
-    for i in lista_de_valores_grafo:
-        valores_grafos = i + valores_grafos
-    # Retirando os elementos duplicados
-    for element in valores_grafos:
-        if element not in valores_grafos_puros:
-            valores_grafos_puros.append(element)
-    # Por fim, retirando os elementos que contem no vertex e o que sobra 
-    # é o independet
-    for element in valores_grafos_puros:
-        if element not in solucao:
-            independet.append(element)
-    
-    # Falta otimizar o código pois ninguem merece 3 for e muito menos 3 vetor
-    return independet
+    chaves = grafo.keys()
+    return list(chaves - solucao)
         
 def main():
     grafo = {}
     grafo = inicializa_grafo(grafo)
 
     solucao = solucao_otima(grafo)
-    print('\n Solucao otima encontrada: ', solucao)
+    print('Solução ótima encontrada:', solucao)
     
+    # conversao = convert_vertex_to_independent(grafo, solucao)
     conversao = convert_vertex_to_independent(grafo, solucao)
-    print('\nConversao para Independent Set: ', conversao)
+    print('\nConversão para Independent Set:', conversao)
 
 main()
