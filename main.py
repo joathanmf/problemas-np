@@ -61,12 +61,37 @@ def solucao_otima(grafo):
         if len(solucao_ot) != i:
             return solucao_ot
         
+def convert_vertex_to_independent(grafo, solucao):
+    
+    lista_de_valores_grafo = list(grafo.values())
+    valores_grafos = []
+    valores_grafos_puros = []
+    independet = []
+    
+    # Colocando as tuplas do grafo em um unico vetor 
+    for i in lista_de_valores_grafo:
+        valores_grafos = i + valores_grafos
+    # Retirando os elementos duplicados
+    for element in valores_grafos:
+        if element not in valores_grafos_puros:
+            valores_grafos_puros.append(element)
+    # Por fim, retirando os elementos que contem no vertex e o que sobra 
+    # é o independet
+    for element in valores_grafos_puros:
+        if element not in solucao:
+            independet.append(element)
+    
+    # Falta otimizar o código pois ninguem merece 3 for e muito menos 3 vetor
+    return independet
+        
 def main():
     grafo = {}
     grafo = inicializa_grafo(grafo)
 
-    #verifica_solucao(grafo, solucao)
     solucao = solucao_otima(grafo)
     print('\n Solucao otima encontrada: ', solucao)
+    
+    conversao = convert_vertex_to_independent(grafo, solucao)
+    print('\nConversao para Independent Set: ', conversao)
 
 main()
