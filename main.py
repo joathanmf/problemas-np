@@ -2,7 +2,6 @@ from itertools import combinations
 
 def inicializa_grafo(grafo):
     arquivo = open("grafo.txt", "r", encoding="utf-8")
-
     linhas = arquivo.readlines()
 
     for linha in linhas:
@@ -21,8 +20,8 @@ def inicializa_grafo(grafo):
         grafo.update({chave: valor_grafo + [valor]})
 
     arquivo.close()
-
     return grafo
+
 
 #Isso aqui é so pra falar se a solução funciona ou não
 def verifica_solucao(grafo, solucao):
@@ -38,6 +37,7 @@ def verifica_solucao(grafo, solucao):
                 return False
 
     return True
+
 
 def solucao_otima(grafo):
     tamanho = len(grafo.keys()) 
@@ -59,43 +59,22 @@ def solucao_otima(grafo):
         # Se nao, a solucao otima tem tamanho i + 1, logo diferente de i, entao retorna a solucao otima
         if len(solucao_ot) != i:
             return solucao_ot
-        
-# def convert_vertex_to_independent(grafo, solucao):
-#     lista_de_valores_grafo = list(grafo.values())
-#     valores_grafos = []
-#     valores_grafos_puros = []
-#     independet = []
-    
-#     # Colocando as tuplas do grafo em um unico vetor 
-#     for i in lista_de_valores_grafo:
-#         valores_grafos = i + valores_grafos
-#     # Retirando os elementos duplicados
-#     for element in valores_grafos:
-#         if element not in valores_grafos_puros:
-#             valores_grafos_puros.append(element)
-#     # Por fim, retirando os elementos que contem no vertex e o que sobra 
-#     # é o independet
-#     for element in valores_grafos_puros:
-#         if element not in solucao:
-#             independet.append(element)
-    
-#     # Falta otimizar o código pois ninguem merece 3 for e muito menos 3 vetor
-#     return independet
 
 
 def convert_vertex_to_independent(grafo, solucao):
-    chaves = grafo.keys()
-    return list(chaves - solucao)
-        
+    return list(grafo.keys() - solucao)
+
+
 def main():
     grafo = {}
     grafo = inicializa_grafo(grafo)
 
     solucao = solucao_otima(grafo)
-    print('Solução ótima encontrada:', solucao)
+    print('Solução ótima encontrada (Vertex Cover):', solucao)
     
     # conversao = convert_vertex_to_independent(grafo, solucao)
     conversao = convert_vertex_to_independent(grafo, solucao)
     print('\nConversão para Independent Set:', conversao)
+
 
 main()
