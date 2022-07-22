@@ -1,25 +1,34 @@
 from itertools import combinations
+import json
+
+
+# def inicializa_grafo(grafo):
+#     arquivo = open("grafo.txt", "r", encoding="utf-8")
+#     linhas = arquivo.readlines()
+
+#     for linha in linhas:
+#         linha = linha.split(" ")
+#         chave = int(linha[0])
+#         grafo.update({chave: []})
+
+#     for linha in linhas:
+#         linha = linha.split(" ")
+#         chave = int(linha[0])
+
+#         valor = linha[1].split("\n")
+#         valor = int(valor[0])
+#         valor_grafo = grafo.get(chave)
+
+#         grafo.update({chave: valor_grafo + [valor]})
+
+#     arquivo.close()
+#     return grafo
+
 
 def inicializa_grafo(grafo):
-    arquivo = open("grafo.txt", "r", encoding="utf-8")
-    linhas = arquivo.readlines()
+    with open("grafo.json", "r") as fp:
+        grafo = json.load(fp, object_hook=lambda d: {int(k) if k else k: v for k, v in d.items()})
 
-    for linha in linhas:
-        linha = linha.split(" ")
-        chave = int(linha[0])
-        grafo.update({chave: []})
-
-    for linha in linhas:
-        linha = linha.split(" ")
-        chave = int(linha[0])
-
-        valor = linha[1].split("\n")
-        valor = int(valor[0])
-        valor_grafo = grafo.get(chave)
-
-        grafo.update({chave: valor_grafo + [valor]})
-
-    arquivo.close()
     return grafo
 
 
@@ -68,11 +77,11 @@ def convert_vertex_to_independent(grafo, solucao):
 def main():
     grafo = {}
     grafo = inicializa_grafo(grafo)
+    print(grafo)
 
     solucao = solucao_otima(grafo)
     print('Solução ótima encontrada (Vertex Cover):', solucao)
     
-    # conversao = convert_vertex_to_independent(grafo, solucao)
     conversao = convert_vertex_to_independent(grafo, solucao)
     print('\nConversão para Independent Set:', conversao)
 
