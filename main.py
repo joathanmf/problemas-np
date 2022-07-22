@@ -2,32 +2,12 @@ from itertools import combinations
 import json
 
 
-# def inicializa_grafo(grafo):
-#     arquivo = open("grafo.txt", "r", encoding="utf-8")
-#     linhas = arquivo.readlines()
-
-#     for linha in linhas:
-#         linha = linha.split(" ")
-#         chave = int(linha[0])
-#         grafo.update({chave: []})
-
-#     for linha in linhas:
-#         linha = linha.split(" ")
-#         chave = int(linha[0])
-
-#         valor = linha[1].split("\n")
-#         valor = int(valor[0])
-#         valor_grafo = grafo.get(chave)
-
-#         grafo.update({chave: valor_grafo + [valor]})
-
-#     arquivo.close()
-#     return grafo
-
-
 def inicializa_grafo(grafo):
     with open("grafo.json", "r") as fp:
-        grafo = json.load(fp, object_hook=lambda d: {int(k) if k else k: v for k, v in d.items()})
+        grafo = json.load(fp,
+                          object_hook=lambda d:
+                          {int(k) if k else k: v
+                           for k, v in d.items()})
 
     return grafo
 
@@ -36,27 +16,25 @@ def inicializa_grafo(grafo):
 def verifica_solucao(grafo, solucao):
     chaves = grafo.keys()
     nao_marcado = chaves - solucao
-        
+
     for k in nao_marcado:
         vizinhos = grafo.get(k)
-        # print('vizinho do nao marcado: ', vizinhos)
         for vizinho in vizinhos:
             if vizinho not in solucao:
-                # print('nao é solucao')
                 return False
 
     return True
 
 
 def solucao_otima(grafo):
-    tamanho = len(grafo.keys()) 
+    tamanho = len(grafo.keys())
 
     solucao_ot = []
     for i in range(tamanho - 1, 0, -1):
         comb = combinations(grafo.keys(), i)
         y = [i for i in comb]
         y = list(map(lambda x: list(x), y))
-        # print('\nCombinatoria: ', y)
+
         for combinatoria in y:
             ehSolucao = verifica_solucao(grafo, combinatoria)
             # Se a combinatoria de tamanho i é uma solucao, entao achamos uma solucao de tamanho i
@@ -70,6 +48,32 @@ def solucao_otima(grafo):
             return solucao_ot
 
 
+def solucao_k(grafo, k):
+    k2 = k
+    k = len(grafo.keys()) - k
+
+    if k <= len(grafo.keys()) and k >= 0 and k2 > 0:
+        solucao_ot = []
+        comb = combinations(grafo.keys(), k)
+        y = [k for k in comb]
+        y = list(map(lambda x: list(x), y))
+
+        for combinatoria in y:
+            ehSolucao = verifica_solucao(grafo, combinatoria)
+            if ehSolucao:
+                solucao_ot = combinatoria
+                break
+
+        if solucao_ot != []:
+            indep_set = convert_vertex_to_independent(grafo, solucao_ot)
+            print(f"Solução: {indep_set}")
+            return True
+    else:
+        print("O valor do k está incorreto.")
+
+    return False
+
+
 def convert_vertex_to_independent(grafo, solucao):
     return list(grafo.keys() - solucao)
 
@@ -77,13 +81,38 @@ def convert_vertex_to_independent(grafo, solucao):
 def main():
     grafo = {}
     grafo = inicializa_grafo(grafo)
-    print(grafo)
+
+    # -------------------- Etapa 1
+    print("\n# ---------- Etapa 1 ---------- #\n")
+
+    possivel_solucao = [0, 2, 4]
+    print(f"Possível solução para o Vertex Cover: {possivel_solucao}")
+
+    if verifica_solucao(grafo, possivel_solucao):
+        print("Sim, é uma solução.\n")
+    else:
+        print("Não, essa não é uma solução.\n")
+
+    # -------------------- Etapa 2
+    print("# ---------- Etapa 2 ---------- #\n")
 
     solucao = solucao_otima(grafo)
-    print('Solução ótima encontrada (Vertex Cover):', solucao)
-    
+    print(f"Solução ótima para o Vertex Cover: {solucao}")
+
     conversao = convert_vertex_to_independent(grafo, solucao)
-    print('\nConversão para Independent Set:', conversao)
+    print(f"Conversão para Independent Set: {conversao}")
+
+    print("\n# ---------- ------- ---------- #\n")
+
+    k = 2
+    sol_k = solucao_k(grafo, k)
+
+    if sol_k:
+        print(f"Há solução para o Independent Set com k = {k}.")
+    else:
+        print(f"Não há solução para o k = {k}.")
+
+    print("\n# ---------- ------- ---------- #\n")
 
 
 main()
